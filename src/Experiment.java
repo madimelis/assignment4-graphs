@@ -9,21 +9,20 @@ public class Experiment {
         dfsTimes = new long[graphSizes.length];
     }
 
-    public void runTraversals(Graph g) {
-        int startVertex = 0;
-
+    public void runTraversals(Graph g, int index) {
         long bfsStart = System.nanoTime();
-        g.bfs(startVertex);
+        g.bfs(0);
         long bfsEnd = System.nanoTime();
-        long bfsDuration = bfsEnd - bfsStart;
+        bfsTimes[index] = bfsEnd - bfsStart;
 
         long dfsStart = System.nanoTime();
-        g.dfs(startVertex);
+        g.dfs(0);
         long dfsEnd = System.nanoTime();
-        long dfsDuration = dfsEnd - dfsStart;
+        dfsTimes[index] = dfsEnd - dfsStart;
 
-        System.out.println("  BFS time: " + bfsDuration + " ns");
-        System.out.println("  DFS time: " + dfsDuration + " ns");
+        System.out.println("  BFS time: " + bfsTimes[index] + " ns");
+        System.out.println("  DFS time: " + dfsTimes[index] + " ns");
+
     }
 
  public void runMultipleTests() {
@@ -35,25 +34,10 @@ public class Experiment {
 
             System.out.println("--- Graph Size: " + size + " vertices, "
                     + g.getEdgeCount() + " edges ---");
-            if (size == 10) {
-                runTraversals(g);
-            } else {
-                long bfsStart = System.nanoTime();
-                g.bfs(0);
-                long bfsEnd = System.nanoTime();
-                bfsTimes[i] = bfsEnd - bfsStart;
-
-                long dfsStart = System.nanoTime();
-                g.dfs(0);
-                long dfsEnd = System.nanoTime();
-                dfsTimes[i] = dfsEnd - dfsStart;
-
-                System.out.println("  BFS time: " + bfsTimes[i] + " ns");
-                System.out.println("  DFS time: " + dfsTimes[i] + " ns");
-            }
+            runTraversals(g, i);
             System.out.println();
+            }
         }
-    }
 
     public void printResults() {
         System.out.println("=== RESULTS SUMMARY TABLE ===");

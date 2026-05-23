@@ -59,6 +59,8 @@ private Graph buildGraph(int size) {
             g.addVertex(new Vertex(i));
         }
     for (int i = 0; i < size; i++) {
+        int weight1 = (i % 5) + 1;
+        int weight2 = ((i + 1) % 7) + 1;
         g.addEdge(i, (i + 1) % size);
         g.addEdge(i, (i + 2) % size);
     }

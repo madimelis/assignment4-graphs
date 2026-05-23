@@ -1,11 +1,8 @@
 import java.util.*;
 
 public class Graph {
-
     private Map<Integer, Vertex> vertices;
-
     private Map<Integer, List<Integer>> adjacencyList;
-
     public Graph() {
         vertices = new HashMap<>();
         adjacencyList = new HashMap<>();
@@ -26,18 +23,8 @@ public class Graph {
 
     public void printGraph() {
         System.out.println("Graph Adjacency List:");
-        // Sort by vertex ID for consistent, readable output
-        List<Integer> sortedKeys = new ArrayList<>(adjacencyList.keySet());
-        Collections.sort(sortedKeys);
-        for (int id : sortedKeys) {
-            System.out.print("  " + id + " -> ");
-            List<Integer> neighbors = adjacencyList.get(id);
-            if (neighbors.isEmpty()) {
-                System.out.print("(none)");
-            } else {
-                System.out.print(neighbors);
-            }
-            System.out.println();
+        for (Map.Entry<Integer, List<Integer>> entry : adjacencyList.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
         }
     }
 

@@ -22,18 +22,19 @@ public class Experiment {
 
         System.out.println("  BFS time: " + bfsTimes[index] + " ns");
         System.out.println("  DFS time: " + dfsTimes[index] + " ns");
-
     }
 
  public void runMultipleTests() {
         System.out.println("=== PERFORMANCE EXPERIMENTS ===\n");
-
         for (int i = 0; i < graphSizes.length; i++) {
             int size = graphSizes[i];
             Graph g = buildGraph(size);
 
             System.out.println("--- Graph Size: " + size + " vertices, "
                     + g.getEdgeCount() + " edges ---");
+            g.printGraph();
+            System.out.println();
+
             runTraversals(g, i);
             System.out.println();
             }
@@ -57,14 +58,10 @@ private Graph buildGraph(int size) {
         for (int i = 0; i < size; i++) {
             g.addVertex(new Vertex(i));
         }
-
-        for (int i = 0; i < size; i++) {
-            for (int offset = 1; offset <= 3; offset++) {
-                if (i + offset < size) {
-                    g.addEdge(i, i + offset);
-                }
-            }
-        }
-        return g;
+    for (int i = 0; i < size; i++) {
+        g.addEdge(i, (i + 1) % size);
+        g.addEdge(i, (i + 2) % size);
+    }
+    return g;
     }
 }

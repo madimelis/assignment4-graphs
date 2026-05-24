@@ -101,9 +101,47 @@ Results generally align with O(V + E), showing a linear increase in time as the 
 One algorithm may appear faster depending on the specific structure (directed/undirected) or the density of the edges.
 
 
-
 **F. Reflection**
 
 In this assignment, I learned how graph structure shapes algorithm behavior. BFS's level-by-level exploration makes it ideal when you need the shortest path or want to find something close to the source. DFS's willingness to go deep first makes it better suited for exhaustive searches, cycle detection, and topological ordering. Both algorithms share the same O(V + E) time complexity, which shows that even very different traversal strategies can be equally efficient when expressed in Big-O terms.
+
+
+## Dijkstra's Algorithm Addition
+
+Implemented Dijkstra's algorithm to find the shortest path from a starting vertex to all other vertices in the graph.
+
+**Changes Made**
+
+- Edge Class: Added the weight field, updated the constructor and added a getWeight() getter.
+- Graph Class:
+  - Switched the adjacency list to Map<Integer, List<Edge>> to store weighted edges directly.
+  - Updated bfs and dfs to work with the new Edge-based structure.
+  - Implemented dijkstra(int start) using arrays for distances and visited nodes, simple loops, no priority queue.
+- Experiment Class: Updated buildGraph()` to assign varying edge weights and added Dijkstra timing to the results table.
+
+ **Output**
+
+```text
+Dijkstra from 0:
+
+  To node 0 -> Distance: 0
+  To node 1 -> Distance: 1
+  To node 2 -> Distance: 1
+  To node 3 -> Distance: 3
+  To node 4 -> Distance: 4
+  To node 5 -> Distance: 7
+  To node 6 -> Distance: 8
+  To node 7 -> Distance: 10
+  To node 8 -> Distance: 13
+  To node 9 -> Distance: 11
+```
+
+
+**How Dijkstra Works**
+
+
+Dijkstra finds the shortest path from a start node to every other node. All distances start as infinity except the start node which is 0. Each step picks the unvisited node with the smallest known distance, then checks its neighbors — if going through the current node gives a shorter path, it updates the distance. Repeats until all reachable nodes are settled.
+
+Unlike BFS which treats all edges as equal, Dijkstra accounts for weights so it can't assume the first path found is the shortest — it keeps updating until certain. The implementation uses a simple array scan instead of a priority queue, which is O(V²) rather than O(V log V), but keeps the code simple.
 
 

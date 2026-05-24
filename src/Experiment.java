@@ -1,69 +1,40 @@
 public class Experiment {
-    private long[] bfsTimes;
-    private long[] dfsTimes;
-    private int[] graphSizes;
-
-    public Experiment() {
-        graphSizes = new int[]{10, 30, 100};
-        bfsTimes = new long[graphSizes.length];
-        dfsTimes = new long[graphSizes.length];
-    }
-
-    public void runTraversals(Graph g, int index) {
-        long bfsStart = System.nanoTime();
-        g.bfs(0);
-        long bfsEnd = System.nanoTime();
-        bfsTimes[index] = bfsEnd - bfsStart;
-
-        long dfsStart = System.nanoTime();
-        g.dfs(0);
-        long dfsEnd = System.nanoTime();
-        dfsTimes[index] = dfsEnd - dfsStart;
-
-        System.out.println("  BFS time: " + bfsTimes[index] + " ns");
-        System.out.println("  DFS time: " + dfsTimes[index] + " ns");
-    }
+    private long[] bfsTimes = new long[3];
+    private long[] dfsTimes = new long[3];
+    private long[] dijkstraTimes = new long[3];
+    private int[] sizes = {10, 30, 100};
 
  public void runMultipleTests() {
         System.out.println("=== PERFORMANCE EXPERIMENTS ===\n");
-        for (int i = 0; i < graphSizes.length; i++) {
-            int size = graphSizes[i];
-            Graph g = buildGraph(size);
+         for (int i = 0; i < sizes.length; i++) {
+             Graph g = buildGraph(sizes[i]);
+             System.out.println("--- Size: " + sizes[i] + " ---");
+             g.printGraph();
 
-            System.out.println("--- Graph Size: " + size + " vertices, "
-                    + g.getEdgeCount() + " edges ---");
-            g.printGraph();
-            System.out.println();
+             long t = System.nanoTime(); g.bfs(0);      bfsTimes[i]      = System.nanoTime() - t;
+             t = System.nanoTime();      g.dfs(0);      dfsTimes[i]      = System.nanoTime() - t;
+             t = System.nanoTime();      g.dijkstra(0); dijkstraTimes[i] = System.nanoTime() - t;
+             System.out.println();
+         }
+     }
 
-            runTraversals(g, i);
-            System.out.println();
-            }
+        public void printResults() {
+            System.out.println("=== RESULTS ===");
+            System.out.printf("%-10s %-15s %-15s %-15s%n", "Size", "BFS (ns)", "DFS (ns)", "Dijkstra (ns)");
+            System.out.println("-".repeat(55));
+            for (int i = 0; i < sizes.length; i++)
+                System.out.printf("%-10d %-15d %-15d %-15d%n", sizes[i], bfsTimes[i], dfsTimes[i], dijkstraTimes[i]);
         }
 
-    public void printResults() {
-        System.out.println("=== RESULTS SUMMARY TABLE ===");
-        System.out.printf("%-15s %-20s %-20s%n", "Graph Size", "BFS Time (ns)", "DFS Time (ns)");
-        System.out.println("-".repeat(55));
 
-        for (int i = 0; i < graphSizes.length; i++) {
-            System.out.printf("%-15d %-20d %-20d%n",
-                    graphSizes[i], bfsTimes[i], dfsTimes[i]);
-        }
-        System.out.println();
-    }
-
-private Graph buildGraph(int size) {
+    private Graph buildGraph(int size) {
         Graph g = new Graph();
-
+        for (int i = 0; i < size; i++) g.addVertex(i);
         for (int i = 0; i < size; i++) {
-            g.addVertex(new Vertex(i));
+            g.addEdge(i, (i + 1) % size, (i % 5) + 1);
+            g.addEdge(i, (i + 2) % size, (i % 7) + 1);
         }
-    for (int i = 0; i < size; i++) {
-        int weight1 = (i % 5) + 1;
-        int weight2 = ((i + 1) % 7) + 1;
-        g.addEdge(i, (i + 1) % size);
-        g.addEdge(i, (i + 2) % size);
-    }
-    return g;
+
+        return g;
     }
 }
